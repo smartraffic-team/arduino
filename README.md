@@ -1,4 +1,4 @@
-# SmartTraffic - Arduino
+# SmarTraffic - Arduino
 
 Firmware para controle do semáforo inteligente.
 
