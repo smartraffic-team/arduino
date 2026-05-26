@@ -1,0 +1,26 @@
+name: CI - Arduino
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Arduino CLI
+      uses: arduino/setup-arduino-cli@v2
+    
+    - name: Install Arduino AVR core (para Uno/Mega/Nano)
+      run: |
+        arduino-cli core update-index
+        arduino-cli core install arduino:avr
+    
+    - name: Compile sketch for Arduino Uno
+      run: |
+        arduino-cli compile --fqbn arduino:avr:uno --warnings all .
