@@ -19,11 +19,11 @@ O firmware inicia com ambos vermelhos por 1 segundo e passa ao ciclo fixo, come�
 
 ## Regras
 
-- Verdes normais de 8 a 25 segundos; em prioridade automática, o verde da via que está cedendo pode receber 0 segundos. Amarelo de 3 segundos e ambos vermelhos por 1 segundo continuam obrigatórios.
+- Verdes normais de 20 a 25 segundos; em prioridade automática, o verde da via que está cedendo pode receber 0 segundos. Amarelo de 3 segundos e ambos vermelhos por 1 segundo continuam obrigatórios.
 - Automático: os tempos enviados pelo Python atualizam o plano sem reiniciar a fase atual. Ao vencer o tempo, alterna para a outra via.
-- Manual: uma solicitação de troca aguarda o mínimo de 8 segundos; mesmo sem nova solicitação alterna ao atingir 25 segundos. Repetir um pedido não prolonga a fase.
+- Manual: uma solicitação de troca aguarda o mínimo de 20 segundos; mesmo sem nova solicitação alterna ao atingir 25 segundos. Repetir um pedido não prolonga a fase.
 - Transições aceitas são concluídas antes de outra troca. Nenhum comando cancela amarelo ou intervalo vermelho.
-- Sem comando válido por 4 segundos, assume FALLBACK com 12 segundos por via. Não reinicia a fase nem interrompe uma transição já aceita.
+- Sem comando válido por 4 segundos, assume FALLBACK com 20 segundos por via. Não reinicia a fase nem interrompe uma transição já aceita.
 - Se o Python parar, a placa energizada continua operando. Desconectar uma placa alimentada somente por USB também corta sua energia; isso não testa o watchdog.
 
 ## Protocolo serial ST1
@@ -38,7 +38,7 @@ O firmware inicia com ambos vermelhos por 1 segundo e passa ao ciclo fixo, come�
 | `MANUAL 2 B` | ID 2; modo manual; solicita B respeitando a fase atual |
 | `KEEP 3` | ID 3; mantém comunicação sem alterar plano, modo ou relógio |
 
-Cada verde em AUTO deve ficar entre 8000–25000 ms ou ser exatamente 0 para uma prioridade. MANUAL durante amarelo/vermelho ou troca pendente é rejeitado. Mensagens legadas, desconhecidas ou maiores que o buffer não acionam sinais.
+Cada verde em AUTO deve ficar entre 20000–25000 ms ou ser exatamente 0 para uma prioridade. MANUAL durante amarelo/vermelho ou troca pendente é rejeitado. Mensagens legadas, desconhecidas ou maiores que o buffer não acionam sinais.
 
 Estado emitido a cada 250 ms, nas transições e após comandos:
 

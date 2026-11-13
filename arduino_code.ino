@@ -6,7 +6,7 @@
 
 const byte GREEN_A = 10, YELLOW_A = 9, RED_A = 11;
 const byte GREEN_B = 6, YELLOW_B = 3, RED_B = 5;
-const unsigned long MIN_GREEN = 8000, MAX_GREEN = 25000, FIXED_GREEN = 12000;
+const unsigned long MIN_GREEN = 20000, MAX_GREEN = 25000, FIXED_GREEN = 20000;
 const unsigned long YELLOW_TIME = 3000, CLEARANCE = 1000, WATCHDOG = 4000;
 enum Phase { A_GREEN, A_YELLOW, B_GREEN, B_YELLOW, ALL_RED };
 enum Mode { AUTO, MANUAL, FALLBACK };
