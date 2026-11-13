@@ -4,8 +4,8 @@
 #include <string.h>
 
 
-const byte GREEN_A = 11, YELLOW_A = 10, RED_A = 9;
-const byte GREEN_B = 6, YELLOW_B = 5, RED_B = 3;
+const byte GREEN_A = 10, YELLOW_A = 9, RED_A = 11;
+const byte GREEN_B = 6, YELLOW_B = 3, RED_B = 5;
 const unsigned long MIN_GREEN = 8000, MAX_GREEN = 25000, FIXED_GREEN = 12000;
 const unsigned long YELLOW_TIME = 3000, CLEARANCE = 1000, WATCHDOG = 4000;
 enum Phase { A_GREEN, A_YELLOW, B_GREEN, B_YELLOW, ALL_RED };
@@ -71,8 +71,11 @@ void command(char* line, unsigned long now) {
   if (sscanf(line, "%11s %lu", operation, &seq) != 2 || seq == 0) return;
   if (strcmp(operation, "AUTO") == 0 &&
       sscanf(line, "%11s %lu %lu %lu %c", operation, &seq, &a, &b, &extra) == 4 &&
-      a >= MIN_GREEN && a <= MAX_GREEN && b >= MIN_GREEN && b <= MAX_GREEN) {
+      (a == 0 || (a >= MIN_GREEN && a <= MAX_GREEN)) &&
+      (b == 0 || (b >= MIN_GREEN && b <= MAX_GREEN))) {
     // Uma troca manual já iniciada deve terminar antes de seguir o plano automático.
+    // Verde=0 permite priorizar uma via sob demanda da câmera correspondente;
+    // amarelo e intervalo com ambos vermelhos continuam obrigatórios.
     greenA = a; greenB = b; mode = AUTO; valid = true;
   } else if (strcmp(operation, "MANUAL") == 0 &&
              sscanf(line, "%11s %lu %c %c", operation, &seq, &road, &extra) == 3 &&

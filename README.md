@@ -19,7 +19,7 @@ O firmware inicia com ambos vermelhos por 1 segundo e passa ao ciclo fixo, come�
 
 ## Regras
 
-- Verdes de 8 a 25 segundos; amarelo de 3 segundos; ambos vermelhos por 1 segundo entre vias.
+- Verdes normais de 8 a 25 segundos; em prioridade automática, o verde da via que está cedendo pode receber 0 segundos. Amarelo de 3 segundos e ambos vermelhos por 1 segundo continuam obrigatórios.
 - Automático: os tempos enviados pelo Python atualizam o plano sem reiniciar a fase atual. Ao vencer o tempo, alterna para a outra via.
 - Manual: uma solicitação de troca aguarda o mínimo de 8 segundos; mesmo sem nova solicitação alterna ao atingir 25 segundos. Repetir um pedido não prolonga a fase.
 - Transições aceitas são concluídas antes de outra troca. Nenhum comando cancela amarelo ou intervalo vermelho.
@@ -33,10 +33,12 @@ O firmware inicia com ambos vermelhos por 1 segundo e passa ao ciclo fixo, come�
 | Comando | Efeito |
 |---|---|
 | `AUTO 1 14000 12000` | ID 1; modo automático; verdes A=14 s e B=12 s |
+| `AUTO 2 10000 0` | ID 2; prioridade da Via A; encerra B e inicia a sequência segura de transição |
+| `AUTO 3 0 14000` | ID 3; prioridade da Via B; encerra A e inicia a sequência segura de transição |
 | `MANUAL 2 B` | ID 2; modo manual; solicita B respeitando a fase atual |
 | `KEEP 3` | ID 3; mantém comunicação sem alterar plano, modo ou relógio |
 
-Tempos AUTO fora de 8000–25000 ms são rejeitados. MANUAL durante amarelo/vermelho ou troca pendente é rejeitado. Mensagens legadas, desconhecidas ou maiores que o buffer não acionam sinais.
+Cada verde em AUTO deve ficar entre 8000–25000 ms ou ser exatamente 0 para uma prioridade. MANUAL durante amarelo/vermelho ou troca pendente é rejeitado. Mensagens legadas, desconhecidas ou maiores que o buffer não acionam sinais.
 
 Estado emitido a cada 250 ms, nas transições e após comandos:
 
@@ -50,6 +52,6 @@ Rejeição: `ERROR ST1 <id> comando_invalido_ou_transicao`. Um comando rejeitado
 
 ## Ensaios físicos pendentes
 
-Verifique início com ambos vermelhos; A→amarelo→ambos vermelhos→B e sequência inversa; ausência de verdes simultâneos; limites mínimo/máximo; pedidos repetidos; modo manual durante transições; parada do Python; reconexão/reinício da placa e do Python. Registre configuração, tempos observados e resultado. Execute também o checklist de câmera e controle em `../computer-vision/README.md`.
+Verifique início com ambos vermelhos; ciclo A/B; prioridade A (B=0) e B (A=0), sempre passando por amarelo e ambos vermelhos; ausência de verdes simultâneos; limites mínimo/máximo; pedidos repetidos; modo manual durante transições; parada do Python; reconexão/reinício da placa e do Python. Registre configuração, tempos observados e resultado. Execute também o checklist de câmera e controle em `../computer-vision/README.md`.
 
 Firmware exclusivo da maquete acadêmica. Não possui realimentação elétrica dos LEDs.
